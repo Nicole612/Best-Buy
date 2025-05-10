@@ -1,3 +1,4 @@
+import sys
 from products import Product
 from store import Store
 
@@ -32,12 +33,16 @@ def place_order(store):
         selected_quantity = input("What amount do you want? ").strip()
         if not selected_index or not selected_quantity:
             break
+        product_index = int(selected_index) - 1
+        if product_index < 0 or product_index >= len(all_products):
+            print("Invalid number to choose a product. Please try again!")
+            continue
 
         try:
-            order = all_products[int(selected_index) - 1], int(selected_quantity)
+            order = all_products[product_index], int(selected_quantity)
             order_list.append(order)
             print("Product added to list!\n")
-        except ValueError as e:
+        except ValueError:
             print("Your order ist fail. Start your order again.")
 
     if order_list:
@@ -57,16 +62,19 @@ def initial_menu(menu):
         print(f"{menu_choice}: {description[0]}")
 
 
-def action_choice(input_choice, menu, store):
+def action_choice(input_choice, store):
     """ Executes the appropriate action based on user input."""
-    if input_choice == 1:
-        display_list_products(store)
-    elif input_choice == 2:
-        get_total_quantity(store)
-    elif input_choice == 3:
-        place_order(store)
-    elif input_choice == 4:
-        exit()
+    try:
+        if input_choice == 1:
+            display_list_products(store)
+        elif input_choice == 2:
+            get_total_quantity(store)
+        elif input_choice == 3:
+            place_order(store)
+        elif input_choice == 4:
+            sys.exit()
+    except ValueError:
+        print("Invalid menu selection. Please choose a vadid number!")
 
 
 def start(store):
@@ -81,12 +89,17 @@ def start(store):
 
     while True:
         initial_menu(menu)
-        choose_number = int(input("Please choose a number: "))
-        action_choice(choose_number, menu, store)
+        try:
+            choose_number = int(input("Please choose a number: "))
+            action_choice(choose_number, store)
+        except ValueError:
+            print("Invalid input. Please enter a number from the menu.")
 
 
 def main():
-    # setup initial stock of inventory
+    """ Initializes a list of sample products, creates a Store instance with them,
+            and starts the interactive store menu where the user can browse products,
+            check inventory, and place orders. """
     product_list = [Product("MacBook Air M2", price=1450, quantity=100),
                     Product("Bose QuietComfort Earbuds", price=250, quantity=500),
                     Product("Google Pixel 7", price=500, quantity=250),

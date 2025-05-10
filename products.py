@@ -1,5 +1,22 @@
 class Product:
+    """ Represents a product in the store.
 
+        Attributes:
+            name (str): The name of the product.
+            price (float): The price per unit of the product.
+            quantity (int): The available quantity of the product in stock.
+            active (bool): Indicates whether the product is currently active.
+
+        Methods:
+            get_quantity()
+            set_quantity(quantity)
+            is_active()
+            activate()
+            deactivate()
+            show()
+            buy(quantity)
+
+        """
     def __init__(self, name, price, quantity):
         if name == "":
             raise ValueError("Productname can not be empty")
@@ -17,10 +34,12 @@ class Product:
 
 
     def get_quantity(self) -> int:
+        """ Returns the current quantity of the product."""
         return  self.quantity
 
 
     def set_quantity(self, quantity):
+        """ Updates the quantity and deactivates the product if it reaches zero. """
         if quantity < 0:
             raise ValueError("Quantity cannot be negative")
         self.quantity = quantity
@@ -29,22 +48,27 @@ class Product:
 
 
     def is_active(self) -> bool:
+        """ Returns whether the product is active. """
         return self.active
 
 
     def activate(self) -> bool:
+        """ Sets the product status to active. """
         self.active = True
 
 
     def deactivate(self):
+        """ Sets the product status to inactive. """
         self.active = False
 
 
     def show(self):
+        """ : Returns a formatted string representation of the product. """
         return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
 
 
     def buy(self, quantity) -> float:
+        """ Processes the purchase of a given quantity and returns the total price. """
         if quantity < 1:
             raise ValueError("You must buy at least one product")
         if self.quantity < quantity:
